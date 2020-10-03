@@ -11,7 +11,7 @@ import (
 
 const (
 	topic = "test"
-	broker = "em_broker:1883"
+	broker = "em-broker:1883"
 )
 
 var mp mqtt.Mqtt

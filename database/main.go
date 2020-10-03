@@ -15,7 +15,7 @@ const (
 	dbName = "empinfo"
 	userName = "admin"
 	passwrd = "admin"
-	broker = "em_broker:1883"
+	broker = "em-broker:1883"
 )
 
 var id dbadmin.InfluxDBAdmin

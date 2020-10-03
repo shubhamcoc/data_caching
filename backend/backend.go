@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	cep = "http://em_cache:4000"
-	dep = "http://em_database:7000"
+	cep = "http://em-cache:4000"
+	dep = "http://em-database:7000"
 )
 
 var store map[string]string
