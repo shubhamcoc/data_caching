@@ -9,7 +9,7 @@ services:
                      GO_VERSION: "1.12"
                      INFLUXDB_VERSION: "1.7.10"
             image: em_database:1.0
-            container_name: em_database
+            container_name: em-database
             networks: 
               - em_network
 
@@ -18,7 +18,7 @@ services:
                context: $PWD/../mqttbroker
                dockerfile: $PWD/../mqttbroker/Dockerfile
             image: em_broker:1.0
-            container_name: em_broker
+            container_name: em-broker
             networks: 
               - em_network
 
@@ -29,7 +29,7 @@ services:
                args:
                      GO_VERSION: "1.14"
             image: em_cache:1.0
-            container_name: em_cache
+            container_name: em-cache
             networks:
               - em_network
 
@@ -43,7 +43,7 @@ services:
                no_proxy: "localhost,127.0.0.1,em_cache,em_database"
                NO_PROXY: "localhost,127.0.0.1,em_cache,em_database"
             image: em_backend:1.0
-            container_name: em_backend
+            container_name: em-backend
             networks:
               - em_network
             ports:

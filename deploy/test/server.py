@@ -7,7 +7,7 @@ from werkzeug import serving
 APP = Flask(__name__)
 @APP.route("/submit", methods=['GET', 'POST'])
 def send_submit():
-    url = "http://localhost:10000/api/submit"
+    url = "http://localhost:30007/api/submit"
     id = 123400
     num = 5
     for i in range(0, 99):
