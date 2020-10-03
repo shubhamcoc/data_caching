@@ -40,8 +40,8 @@ services:
                args:
                      GO_VERSION: "1.12"
             environment:
-               no_proxy: "localhost,127.0.0.1,em_cache,em_database"
-               NO_PROXY: "localhost,127.0.0.1,em_cache,em_database"
+               no_proxy: "localhost,127.0.0.1,em-cache,em-database"
+               NO_PROXY: "localhost,127.0.0.1,em-cache,em-database"
             image: em_backend:1.0
             container_name: em-backend
             networks:
