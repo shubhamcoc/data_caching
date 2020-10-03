@@ -1,0 +1,55 @@
+version: '3.6'
+
+services:
+        em_database:
+            build:
+               context: $PWD/../database
+               dockerfile: $PWD/../database/Dockerfile
+               args:
+                     GO_VERSION: "1.12"
+                     INFLUXDB_VERSION: "1.7.10"
+            image: em_database:1.0
+            container_name: em_database
+            networks: 
+              - em_network
+
+        em_broker:
+            build:
+               context: $PWD/../mqttbroker
+               dockerfile: $PWD/../mqttbroker/Dockerfile
+            image: em_broker:1.0
+            container_name: em_broker
+            networks: 
+              - em_network
+
+        em_cache:
+            build:
+               context: $PWD/../cache
+               dockerfile: $PWD/../cache/Dockerfile
+               args:
+                     GO_VERSION: "1.14"
+            image: em_cache:1.0
+            container_name: em_cache
+            networks:
+              - em_network
+
+        em_backend:
+            build:
+               context: $PWD/../backend
+               dockerfile: $PWD/../backend/Dockerfile
+               args:
+                     GO_VERSION: "1.12"
+            environment:
+               no_proxy: "localhost,127.0.0.1,em_cache,em_database"
+               NO_PROXY: "localhost,127.0.0.1,em_cache,em_database"
+            image: em_backend:1.0
+            container_name: em_backend
+            networks:
+              - em_network
+            ports:
+              - "10000:6000"
+
+networks:
+     em_network:
+         driver: bridge
+
