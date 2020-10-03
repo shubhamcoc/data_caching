@@ -17,5 +17,5 @@ spec:
       containers:
       - image: em_broker:1.0
         name: em-broker
-      ports:
-        - containerPort: 1883
+        ports:
+          - containerPort: 1883
