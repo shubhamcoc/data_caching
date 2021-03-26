@@ -1,0 +1,8 @@
+// Example command to use /submit API
+curl -v -X POST -H "Content-Type: application/json" http://localhost:10000/submit -d '{"key": "3", "value": "test3"}'
+
+// Example command to use /searchbyID API
+curl -v http://localhost:10000/searchbyID?key="2"
+
+// Example command to use /search API
+curl -v "http://localhost:10000/search?offset=0&emp_name=test"

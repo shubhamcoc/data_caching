@@ -1,0 +1,88 @@
+version: '3.6'
+
+services:
+        em_database:
+            depends_on:
+               - em_broker
+            build:
+               context: $PWD/../database
+               dockerfile: $PWD/../database/Dockerfile
+               args:
+                     GO_VERSION: "1.16"
+            environment:
+               PORT: 7000
+               HOST: "0.0.0.0"
+               no_proxy: "localhost,127.0.0.1,em-cache,em-backend,em-broker"
+               NO_PROXY: "localhost,127.0.0.1,em-cache,em-backend,em-broker"
+            image: em_database:1.0
+            container_name: em-database
+            networks: 
+              - em_network
+
+        em_broker:
+            depends_on:
+               - em_zookeeper
+            build:
+               context: $PWD/../kafkabroker
+               dockerfile: $PWD/../kafkabroker/Dockerfile
+            environment:
+               - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+               - ALLOW_PLAINTEXT_LISTENER=yes
+               - KAFKA_LISTENERS=PLAINTEXT://em-broker:9092
+            hostname: em-broker
+            image: em_broker:1.0
+            container_name: em-broker
+            networks: 
+              - em_network
+
+        em_zookeeper:
+            build:
+               context: $PWD/../zookeeper
+               dockerfile: $PWD/../zookeeper/Dockerfile
+            environment:
+               - ALLOW_ANONYMOUS_LOGIN=yes
+            image: em_zookeeper:1.0
+            container_name: zookeeper
+            networks: 
+              - em_network
+      
+        em_cache:
+            depends_on:
+               - em_broker
+            build:
+               context: $PWD/../cache
+               dockerfile: $PWD/../cache/Dockerfile
+               args:
+                     GO_VERSION: "1.16"
+            environment:
+               no_proxy: "localhost,127.0.0.1,em-backend,em-database"
+               NO_PROXY: "localhost,127.0.0.1,em-backend,em-database"
+               PORT: 4000
+               HOST: "0.0.0.0"
+            image: em_cache:1.0
+            container_name: em-cache
+            networks:
+              - em_network
+
+        em_backend:
+            build:
+               context: $PWD/../backend
+               dockerfile: $PWD/../backend/Dockerfile
+               args:
+                     GO_VERSION: "1.16"
+            environment:
+               no_proxy: "localhost,127.0.0.1,em-cache,em-database"
+               NO_PROXY: "localhost,127.0.0.1,em-cache,em-database"
+               PORT: 6000
+               HOST: "0.0.0.0"
+            image: em_backend:1.0
+            container_name: em-backend
+            networks:
+              - em_network
+            ports:
+              - "10000:6000"
+
+networks:
+     em_network:
+         driver: bridge
+

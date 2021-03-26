@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  title: Cache APIs
+  description: EM cache interface APIs
+  version: 1.1.0
+schemes: 
+  - http
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /search:
+    post:
+      summary: Return 10 data to the backend 
+      consumes: 
+        - application/json
+      parameters: 
+        - in: body
+          name: data
+          schema:
+            $ref: "#/definitions/offset"
+
+      responses:
+        200:
+          description: Response with 10 key value pair
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/record"
+
+        400:
+          description: The specified offset is not valid
+
+        405: 
+          description: Method not allowed
+          
+
+  /get:
+    get:
+      summary: Return the query result
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: employee_id
+          required: true
+          type: string
+          
+      responses:
+        200:
+          description: return employee name
+          schema:
+            $ref: "#/definitions/record"
+
+        400:
+          description: Key not found
+
+        405:
+          description: Method not allowed
+        
+
+  /write:
+    post:
+      summary: Save data in cache
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          schema:
+            $ref: "#/definitions/record"
+            
+      responses:
+        200:
+          description: data inserted
+          schema:
+            $ref: "#/definitions/validstringresponse"
+          
+        400:
+          description: The specified key, value pair is invalid (requires strings)
+          
+        405:
+          description: Method not allowed
+
+definitions:
+  record:
+    type: object
+    required:
+      - employee_id
+      - employee_name
+    properties:
+      employee_id:
+        type: string
+      employee_name:
+        type: string
+
+  validstringresponse:
+    type: string
+
+  offset:
+    type: object
+    required:
+      - key
+      - start
+      - stop
+    properties:
+      key:
+        type: string
+      start:
+        type: string
+      stop:
+        type: string

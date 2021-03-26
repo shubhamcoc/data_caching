@@ -1,0 +1,102 @@
+swagger: "2.0"
+info:
+  title: Backend APIs
+  description: EM Backend server APIs
+  version: 1.1.0
+schemes: 
+  - http
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /search:
+    get:
+      summary: Return the 10 results 
+      produces: 
+        - application/json
+      parameters: 
+        - in: query
+          name: offset
+          type: integer
+          required: true
+        - in: query
+          name: emp_name
+          type: string
+          required: true
+
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              value:
+                type: string
+
+        400:
+          description: The specified offset is not valid
+
+        405: 
+          description: Method not allowed
+          
+
+  /searchbyID:
+    get:
+      summary: Return the search result
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: key
+          required: true
+          type: string
+          
+      responses:
+        200:
+          description: Data found
+          schema:
+            properties:
+              value:
+                type: string
+
+        400:
+          description: Key not found
+
+        405:
+          description: Method not allowed
+        
+
+  /submit:
+    post:
+      summary: Save data in database
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          schema:     
+            $ref: "#/definitions/record"
+            
+      responses:
+        200:
+          description: Saved
+          
+        400:
+          description: The specified key, value pair is invalid (requires strings)
+          
+        405:
+          description: Method not allowed
+
+definitions:
+  record:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        type: string
+      value:
+        type: string

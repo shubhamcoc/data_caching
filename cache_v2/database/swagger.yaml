@@ -1,0 +1,99 @@
+swagger: "2.0"
+info:
+  title: Database APIs
+  description: EM database interface APIs
+  version: 1.1.0
+schemes: 
+  - http
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /load:
+    post:
+      summary: Load data in cache 
+      consumes: 
+        - application/json
+      parameters: 
+        - in: body
+          name: data
+          schema:
+            $ref: "#/definitions/record"
+
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/validstringresponse"
+
+        400:
+          description: The specified offset is not valid
+
+        405: 
+          description: Method not allowed
+          
+
+  /read:
+    get:
+      summary: Return the query result
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: employee_id
+          required: true
+          type: string
+          
+      responses:
+        200:
+          description: Data found
+          schema:
+            $ref: "#/definitions/record"
+
+        400:
+          description: Key not found
+
+        405:
+          description: Method not allowed
+        
+
+  /write:
+    post:
+      summary: Save data in database
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          schema:
+            $ref: "#/definitions/record"
+            
+      responses:
+        200:
+          description: data inserted
+          schema:
+            $ref: "#/definitions/validstringresponse"
+          
+        400:
+          description: The specified key, value pair is invalid (requires strings)
+          
+        405:
+          description: Method not allowed
+
+definitions:
+  record:
+    type: object
+    required:
+      - employee_id
+      - employee_name
+    properties:
+      employee_id:
+        type: string
+      employee_name:
+        type: string
+
+  validstringresponse:
+    type: string
